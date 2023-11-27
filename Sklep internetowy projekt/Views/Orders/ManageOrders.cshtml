@@ -1,0 +1,25 @@
+﻿@model List<Order>
+
+<h2>Manage Orders</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Order Date</th>
+            <th>Product ID</th>
+            <th>Quantity</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+            <tr>
+                <td>@order.OrderId</td>
+                <td>@order.OrderDate</td>
+                <td>@order.ProductId</td>
+                <td>@order.Quantity</td>
+            </tr>
+        }
+    </tbody>
+</table>

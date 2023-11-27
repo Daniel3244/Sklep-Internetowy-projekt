@@ -1,0 +1,25 @@
+﻿@model List<Product>
+
+<h2>Product List</h2>
+
+<div class="row">
+    @foreach (var product in Model)
+    {
+        <div class="col-md-4">
+            <div class="card mb-4 box-shadow">
+                <img class="card-img-top" src=/Pics/KlawiaturaBiurowa.jpg alt="Nazwa produktu" style="max-width: 370px; max-height: 416px;">
+                <div class="card-body">
+                    <h3 class="card-title">@product.Name</h3>
+                    <p class="card-text">Cena: @product.Price.ToString("C")</p>
+                    <!-- Dodaj inne informacje o produkcie, jeśli są używane -->
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group">
+                            <a asp-controller="Product" asp-action="Details" asp-route-id="@product.ProductId" class="btn btn-sm btn-outline-secondary">Zobacz szczegóły</a>
+                            <!-- Dodaj inne przyciski lub linki, jeśli są używane -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
