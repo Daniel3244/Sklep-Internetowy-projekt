@@ -1,0 +1,42 @@
+﻿@model List<ShoppingCartItem>
+
+<h2>Your Shopping Cart</h2>
+
+@using System.Globalization
+
+@if (Model.Count == 0)
+{
+    <p>Your cart is empty.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @{
+                CultureInfo culture = new CultureInfo("pl-PL");
+            }
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ProductName</td>
+                    <td>@item.Price.ToString("C", culture)</td>
+                    <td>@item.Quantity</td>
+                    <td>@(item.Price * item.Quantity)zł</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div>
+        <a asp-controller="Cart" asp-action="Checkout" class="btn btn-primary">Checkout</a>
+    </div>
+}

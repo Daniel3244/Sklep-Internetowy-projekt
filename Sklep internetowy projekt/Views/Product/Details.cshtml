@@ -1,0 +1,16 @@
+﻿@model Product
+
+
+<div class="card">
+    <img src=/Pics/KlawiaturaBiurowa.jpg class="card-img-top" alt="Product Image" style="max-width: 100%; max-height: 100%;">
+    <div class="card-body">
+        <h5 class="card-title">@Model.Name</h5>
+        <p class="card-text">Cena: @Model.Price.ToString("C")</p>
+        <p class="card-text">Opis: @Model.Desc</p>
+
+        <form asp-controller="Cart" asp-action="AddToCart" method="post">
+            <input type="hidden" name="productId" value="@Model.ProductId" />
+            <button type="submit" class="btn btn-primary">Dodaj do koszyka</button>
+        </form>
+    </div>
+</div>
