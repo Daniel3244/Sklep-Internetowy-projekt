@@ -5,7 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Sklep_internetowy_projekt.Models;
+using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Sklep_internetowy_projekt
 {
@@ -18,11 +20,8 @@ namespace Sklep_internetowy_projekt
 
         public IConfiguration Configuration { get; }
 
-
         public void ConfigureServices(IServiceCollection services)
         {
-
-            // Inne konfiguracje
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
@@ -31,28 +30,25 @@ namespace Sklep_internetowy_projekt
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DevConnection")));
 
-            services.AddSession(options =>
-            {
-                options.IdleTimeout = TimeSpan.FromMinutes(30); // Ustaw czas wygasania sesji
-            });
-
             services.AddIdentity<ApplicationUser, IdentityRole>()
-            .AddEntityFrameworkStores<ApplicationDbContext>()
-            .AddDefaultUI()
-            .AddDefaultTokenProviders();
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultUI()
+                .AddDefaultTokenProviders();
 
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
+            });
 
             services.AddControllersWithViews();
 
             services.AddSession();
-            services.AddControllersWithViews();
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public async void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-
             app.UseSession();
-            // Konfiguracja middleware'ów
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -63,30 +59,40 @@ namespace Sklep_internetowy_projekt
                 app.UseHsts();
             }
 
+            // Kod dodajacy konto admina, przy pierwszym uruchomieniu odkomentowac, uruchomic, potem zakomentowac
+            /* using (var serviceScope = app.ApplicationServices.CreateScope())
+             {
+                 var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+                 var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
+                 await SeedData.Initialize(userManager, roleManager);
+             }  */
+           
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
-            // Dodaj konfiguracje routingu
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Product}/{action=Index}/{id?}");
 
+                endpoints.MapControllerRoute(
+                   name: "admin",
+                  
+                   pattern: "{controller=Admin}/{action=Index}/{id?}");
+
                 endpoints.MapAreaControllerRoute(
-                name: "Identity",
-                areaName: "Identity",
-                pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+                    name: "Identity",
+                    areaName: "Identity",
+                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
                 endpoints.MapRazorPages();
             });
 
-            // Dodaj konfiguracje sesji
             app.UseSession();
         }
     }

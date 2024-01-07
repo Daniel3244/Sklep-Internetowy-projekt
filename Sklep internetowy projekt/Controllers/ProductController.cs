@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Sklep_internetowy_projekt.Models;
 using System.Linq;
 
+
+[Authorize]
 public class ProductController : Controller
 {
     private readonly ApplicationDbContext _context;
@@ -16,23 +19,6 @@ public class ProductController : Controller
     {
         var products = _context.Products.ToList();
         return View(products);
-    }
-
-    public IActionResult Create()
-    {
-        return View();
-    }
-
-    [HttpPost]
-    public IActionResult Create(Product product)
-    {
-        if (ModelState.IsValid)
-        {
-            _context.Products.Add(product);
-            _context.SaveChanges();
-            return RedirectToAction("Index");
-        }
-        return View(product);
     }
 
     public IActionResult Details(int? id)
@@ -51,6 +37,7 @@ public class ProductController : Controller
 
         return View(product);
     }
+
 
 
 }

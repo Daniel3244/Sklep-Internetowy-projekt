@@ -1,34 +1,46 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Sklep_internetowy_projekt.Models;
+using System;
+using System.Threading.Tasks;
 
-public static class SeedData
+public class SeedData
 {
-    public static async Task Initialize(IServiceProvider serviceProvider, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+    public static async Task Initialize(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
     {
-        string[] roleNames = { "Admin", "User" };
+        string roleName = "Admin";
         IdentityResult roleResult;
 
-        foreach (var roleName in roleNames)
+        var roleExist = await roleManager.RoleExistsAsync(roleName);
+
+        // Create the Admin role if it doesn't exist
+        if (!roleExist)
         {
-            var roleExist = await roleManager.RoleExistsAsync(roleName);
-            if (!roleExist)
-            {
-                // Create the roles and seed them to the database
-                roleResult = await roleManager.CreateAsync(new IdentityRole(roleName));
-            }
+            roleResult = await roleManager.CreateAsync(new IdentityRole(roleName));
         }
 
-        ApplicationUser user = await userManager.FindByEmailAsync("admin@admin.com");
+        // Create the Admin user
+        var admin = new ApplicationUser
+        {
+            UserName = "admin@admin.com",
+            Email = "admin@admin.com",
+            FirstName = "Admin",
+            LastName = "Adminn"
+        };
+
+        string adminPassword = "@@r_D*ZMQ7wWYeZ";
+
+        var user = await userManager.FindByEmailAsync(admin.Email);
 
         if (user == null)
         {
-            user = new ApplicationUser()
+            var createAdmin = await userManager.CreateAsync(admin, adminPassword);
+
+            if (createAdmin.Succeeded)
             {
-                UserName = "admin",
-                Email = "admin@admin.com",
-            };
-            await userManager.CreateAsync(user, "Admin@123");
+                // Add the Admin user to the Admin role
+                await userManager.AddToRoleAsync(admin, roleName);
+                Console.WriteLine("Admin created");
+            }
         }
-        await userManager.AddToRoleAsync(user, "Admin");
     }
 }

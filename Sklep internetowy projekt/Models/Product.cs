@@ -14,10 +14,11 @@ namespace Sklep_internetowy_projekt.Models
         [Range(0.01, 1000.00, ErrorMessage = "Price must be between 0.01 and 1000.00")]
         public decimal Price { get; set; }
         public string ImagePath { get; set; }
+
     }
 
     public class Order
-    {
+    { 
         public int OrderId { get; set; }
 
         [Required]

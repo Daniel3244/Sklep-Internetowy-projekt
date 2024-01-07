@@ -8,9 +8,8 @@
         <p class="card-text">Cena: @Model.Price.ToString("C")</p>
         <p class="card-text">Opis: @Model.Desc</p>
 
-        <form asp-controller="Cart" asp-action="AddToCart" method="post">
-            <input type="hidden" name="productId" value="@Model.ProductId" />
-            <button type="submit" class="btn btn-primary">Dodaj do koszyka</button>
-        </form>
+
+        <a asp-action="Edit" asp-route-id="@Model.ProductId">Edit</a>
+       
     </div>
 </div>
