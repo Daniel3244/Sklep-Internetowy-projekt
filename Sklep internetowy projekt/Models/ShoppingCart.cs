@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Sklep_internetowy_projekt.Models
 {
@@ -9,12 +10,16 @@ namespace Sklep_internetowy_projekt.Models
 
     public class ShoppingCartItem
     {
+        [Key]
+        [ForeignKey("ProductId")]
         public int ProductId { get; set; }
         public string ProductName { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:C}")]
         public decimal Price { get; set; }
         public int Quantity { get; set; }
+
+       
     }
 }
 

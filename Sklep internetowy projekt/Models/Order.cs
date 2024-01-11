@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Sklep_internetowy_projekt.Models
 {
@@ -22,6 +24,11 @@ namespace Sklep_internetowy_projekt.Models
 
         [Required(ErrorMessage = "Home Number is required.")]
         public string HomeNumber { get; set; }
+
+        public DateTime OrderDate { get; set; }
+
+
+        public List<ShoppingCartItem> SelectedProducts { get; set; } = new List<ShoppingCartItem>();
 
         public ICollection<OrderProduct> OrderProducts { get; set; }
     }

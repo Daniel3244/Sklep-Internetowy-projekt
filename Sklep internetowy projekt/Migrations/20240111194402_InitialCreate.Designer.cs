@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Sklep_internetowy_projekt.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240111194402_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,15 +53,15 @@ namespace Sklep_internetowy_projekt.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "3a65f731-c12d-4efe-a76e-f5f036849e24",
-                            ConcurrencyStamp = "84a1008a-2196-46dd-9078-45a0a9529f92",
+                            Id = "be17c04d-c20d-49c6-b4d6-950bcaa2e2e5",
+                            ConcurrencyStamp = "4d68f9c8-404c-43e5-889d-38c0759654ed",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "42594147-9ca0-4174-8785-014c53b29169",
-                            ConcurrencyStamp = "c9bfbb63-c5a1-4165-bc97-de5e55cb480e",
+                            Id = "8be7a971-bafb-41ce-9cf6-de4affa7226d",
+                            ConcurrencyStamp = "b1ef977c-8b30-4ec1-92fb-f9e456adb719",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -328,39 +331,6 @@ namespace Sklep_internetowy_projekt.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("Sklep_internetowy_projekt.Models.ShoppingCartItem", b =>
-                {
-                    b.Property<int>("ProductId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductId"));
-
-                    b.Property<int?>("OrderId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("ProductId1")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ProductName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProductId");
-
-                    b.HasIndex("OrderId");
-
-                    b.HasIndex("ProductId1");
-
-                    b.ToTable("ShoppingCartItem");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -431,31 +401,14 @@ namespace Sklep_internetowy_projekt.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("Sklep_internetowy_projekt.Models.ShoppingCartItem", b =>
-                {
-                    b.HasOne("Sklep_internetowy_projekt.Models.Order", null)
-                        .WithMany("SelectedProducts")
-                        .HasForeignKey("OrderId");
-
-                    b.HasOne("Sklep_internetowy_projekt.Models.Product", null)
-                        .WithMany("ShoppingCartItems")
-                        .HasForeignKey("ProductId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Sklep_internetowy_projekt.Models.Order", b =>
                 {
                     b.Navigation("OrderProducts");
-
-                    b.Navigation("SelectedProducts");
                 });
 
             modelBuilder.Entity("Sklep_internetowy_projekt.Models.Product", b =>
                 {
                     b.Navigation("OrderProducts");
-
-                    b.Navigation("ShoppingCartItems");
                 });
 #pragma warning restore 612, 618
         }

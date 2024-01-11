@@ -1,14 +1,19 @@
-﻿@model List<OrderProduct>
+﻿@model IEnumerable<Sklep_internetowy_projekt.Models.Order>
+
+@{
+    ViewData["Title"] = "Manage Orders";
+}
 
 <h2>Manage Orders</h2>
 
 <table class="table">
     <thead>
         <tr>
-            <th>Order ID</th>
+            <th>Order Number</th>
             <th>Order Date</th>
-            <th>Product ID</th>
-            <th>Quantity</th>
+            <th>Customer</th>
+            <th>Address</th>
+            <th>Product Details</th>
         </tr>
     </thead>
     <tbody>
@@ -16,9 +21,19 @@
         {
             <tr>
                 <td>@order.OrderId</td>
-                <td>@order.OrderDate</td>
-                <td>@order.ProductId</td>
-                <td>@order.Quantity</td>
+                <td>@order.OrderDate.ToShortDateString()</td>
+                <td>@order.Name @order.Surname</td>
+                <td>@order.Address</td>
+                <td>
+                    <ul>
+                        @foreach (var orderProduct in order.OrderProducts)
+                        {
+                            <li>
+                                Product: @orderProduct.Product.Name, Quantity: @orderProduct.Quantity
+                            </li>
+                        }
+                    </ul>
+                </td>
             </tr>
         }
     </tbody>

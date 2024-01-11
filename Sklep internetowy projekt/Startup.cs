@@ -47,7 +47,7 @@ namespace Sklep_internetowy_projekt
 
         public async void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseSession();
+            
 
             if (env.IsDevelopment())
             {
@@ -70,6 +70,7 @@ namespace Sklep_internetowy_projekt
            
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseSession();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
@@ -101,7 +102,7 @@ namespace Sklep_internetowy_projekt
                 endpoints.MapRazorPages();
             });
 
-            app.UseSession();
+         
         }
     }
 }

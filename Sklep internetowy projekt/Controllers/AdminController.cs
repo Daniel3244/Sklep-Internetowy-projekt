@@ -32,7 +32,7 @@ namespace Sklep_internetowy_projekt.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Create(Product product)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 _context.Products.Add(product);
                 _context.SaveChanges();

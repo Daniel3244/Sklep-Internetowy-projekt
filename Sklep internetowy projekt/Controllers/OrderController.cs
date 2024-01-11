@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Sklep_internetowy_projekt.Models;
 using System;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 
 public class OrderController : Controller
 {
@@ -15,7 +17,7 @@ public class OrderController : Controller
 
     public IActionResult ManageOrders()
     {
-        var orders = _context.Order.ToList();
+        var orders = _context.Orders.ToList();
         return View(orders);
     }
 
@@ -29,7 +31,7 @@ public class OrderController : Controller
     {
         if (ModelState.IsValid)
         {
-            _context.Order.Add(order);
+            _context.Orders.Add(order);
             _context.SaveChanges();
             return RedirectToAction("ManageOrders");
         }
@@ -48,17 +50,67 @@ public class OrderController : Controller
     {
         if (!ModelState.IsValid)
         {
-            // Save order details to the database
-            _context.Order.Add(order);
-           
-           _context.SaveChanges();
+            order.OrderDate = DateTime.Now;
 
-            // You may want to clear the shopping cart or perform other actions
+            // Przetwarzaj wybrane produkty bezpośrednio z obiektu order
+            foreach (var item in order.SelectedProducts)
+            {
+                var product = _context.Products.Find(item.ProductId);
+                if (product != null)
+                {
+                    order.OrderProducts.Add(new OrderProduct
+                    {
+                        Product = product,
+                        Quantity = item.Quantity,
+                        UnitPrice = product.Price
+                    });
+                }
+            }
+
+            _context.Orders.Add(order);
+            _context.SaveChanges();
 
             return RedirectToAction("OrderConfirmation", new { orderId = order.OrderId });
         }
 
-        // If ModelState is not valid, return to the checkout page with errors
-        return View("Checkout", order);
+        // Jeśli ModelState jest nieprawidłowy, zwracamy widok z modelem "order"
+        return View(order);
     }
+
+
+    public IActionResult OrderConfirmation(int orderId)
+    {
+        var order = _context.Orders.FirstOrDefault(o => o.OrderId == orderId);
+
+        if (order == null)
+        {
+            // Obsługa sytuacji, gdy nie znaleziono zamówienia
+            return NotFound();
+        }
+
+        // Sprawdź, czy istnieją produkty w zamówieniu
+        if (order.OrderProducts == null || !order.OrderProducts.Any())
+        {
+            // Obsługa sytuacji, gdy zamówienie nie zawiera produktów
+            return NotFound();
+        }
+
+        decimal totalPrice = CalculateTotalPrice(order);
+        ViewBag.TotalPrice = totalPrice;
+
+        return View(order);
+    }
+
+    private decimal CalculateTotalPrice(Order order)
+    {
+        decimal totalPrice = 0;
+
+        foreach (var orderProduct in order.OrderProducts)
+        {
+            totalPrice += orderProduct.Quantity * orderProduct.UnitPrice;
+        }
+
+        return totalPrice;
+    }
+
 }

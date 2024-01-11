@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Sklep_internetowy_projekt.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240109203039_OrderInitial")]
-    partial class OrderInitial
+    [Migration("20240111210022_InitialCerate2")]
+    partial class InitialCerate2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -53,15 +53,15 @@ namespace Sklep_internetowy_projekt.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "dcf20fac-98e7-4762-a9df-e17ec18d73de",
-                            ConcurrencyStamp = "3f350c98-fc0a-4582-ab66-496915524e8a",
+                            Id = "b91a8b13-2430-4f6f-bf0b-fdf91a9eea1e",
+                            ConcurrencyStamp = "796ce952-0778-4c4f-89c1-e31c17494038",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "6384c3c8-0f6b-41d2-9237-c398e12165f5",
-                            ConcurrencyStamp = "66fd8a3b-b5ef-4569-b11b-951d69a56dab",
+                            Id = "c77d2e7c-f68d-4f82-9fdf-41a2aa24616d",
+                            ConcurrencyStamp = "4d391d7b-b632-43ae-95ab-1e9cdb299a36",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -266,6 +266,9 @@ namespace Sklep_internetowy_projekt.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("PostalCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -282,20 +285,18 @@ namespace Sklep_internetowy_projekt.Migrations
             modelBuilder.Entity("Sklep_internetowy_projekt.Models.OrderProduct", b =>
                 {
                     b.Property<int>("OrderId")
-                        .HasColumnType("int")
-                        .HasColumnOrder(1);
-
-                    b.Property<DateTime>("OrderDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("int");
 
                     b.Property<int>("ProductId")
-                        .HasColumnType("int")
-                        .HasColumnOrder(2);
+                        .HasColumnType("int");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.HasKey("OrderId");
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("OrderId", "ProductId");
 
                     b.HasIndex("ProductId");
 
@@ -328,6 +329,34 @@ namespace Sklep_internetowy_projekt.Migrations
                     b.HasKey("ProductId");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("Sklep_internetowy_projekt.Models.ShoppingCartItem", b =>
+                {
+                    b.Property<int>("ProductId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductId"));
+
+                    b.Property<int?>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("ProductName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProductId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("ShoppingCartItem");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -400,9 +429,18 @@ namespace Sklep_internetowy_projekt.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("Sklep_internetowy_projekt.Models.ShoppingCartItem", b =>
+                {
+                    b.HasOne("Sklep_internetowy_projekt.Models.Order", null)
+                        .WithMany("SelectedProducts")
+                        .HasForeignKey("OrderId");
+                });
+
             modelBuilder.Entity("Sklep_internetowy_projekt.Models.Order", b =>
                 {
                     b.Navigation("OrderProducts");
+
+                    b.Navigation("SelectedProducts");
                 });
 
             modelBuilder.Entity("Sklep_internetowy_projekt.Models.Product", b =>

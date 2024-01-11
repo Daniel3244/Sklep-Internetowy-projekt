@@ -6,11 +6,8 @@ namespace Sklep_internetowy_projekt.Models
 {
     public class OrderProduct
     {
-        [Key]
-        [Column(Order = 1)]
         public int OrderId { get; set; }
 
-        [Column(Order = 2)]
         public int ProductId { get; set; }
 
         [ForeignKey("OrderId")]
@@ -21,6 +18,6 @@ namespace Sklep_internetowy_projekt.Models
 
         public int Quantity { get; set; }
 
-        public DateTime OrderDate { get; set; }
+        public decimal UnitPrice { get; set; }
     }
 }

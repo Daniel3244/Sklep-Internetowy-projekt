@@ -1,0 +1,34 @@
+﻿@model Sklep_internetowy_projekt.Models.Order
+
+@{
+    ViewData["Title"] = "Potwierdzenie zamówienia";
+    decimal totalPrice = ViewBag.TotalPrice;
+}
+
+<h2>Potwierdzenie zamówienia</h2>
+
+<div>
+    <h3>Szczegóły zamówienia</h3>
+    <p>
+        <strong>Numer zamówienia:</strong> @Model.OrderId<br />
+        <strong>Data zamówienia:</strong> @Model.OrderDate.ToShortDateString()
+    </p>
+
+    <h4>Produkty w zamówieniu:</h4>
+    <ul>
+        @foreach (var item in Model.OrderProducts)
+        {
+            <li>
+                Produkt: @item.Product.Name, Ilość: @item.Quantity, Cena za sztukę: @item.UnitPrice
+            </li>
+        }
+    </ul>
+
+    <p>
+        <strong>Całkowity koszt:</strong> @totalPrice
+    </p>
+</div>
+
+<div>
+    <a asp-action="Index" asp-controller="Home">Powrót do strony głównej</a>
+</div>

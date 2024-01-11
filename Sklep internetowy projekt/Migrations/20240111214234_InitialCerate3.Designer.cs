@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Sklep_internetowy_projekt.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240107185844_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240111214234_InitialCerate3")]
+    partial class InitialCerate3
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -53,15 +53,15 @@ namespace Sklep_internetowy_projekt.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "ef4c51d6-e551-4205-8ba6-c28eb3baf0d4",
-                            ConcurrencyStamp = "282b10e8-0608-495c-9526-0f6ed1122219",
+                            Id = "3a65f731-c12d-4efe-a76e-f5f036849e24",
+                            ConcurrencyStamp = "84a1008a-2196-46dd-9078-45a0a9529f92",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "f821a13e-d2ec-4c24-bc40-863fe812e0fe",
-                            ConcurrencyStamp = "6305aa5d-962e-460f-b722-6435e393e486",
+                            Id = "42594147-9ca0-4174-8785-014c53b29169",
+                            ConcurrencyStamp = "c9bfbb63-c5a1-4165-bc97-de5e55cb480e",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -254,8 +254,38 @@ namespace Sklep_internetowy_projekt.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"));
 
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HomeNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("PostalCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Surname")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("OrderId");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("Sklep_internetowy_projekt.Models.OrderProduct", b =>
+                {
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
@@ -263,9 +293,14 @@ namespace Sklep_internetowy_projekt.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.HasKey("OrderId");
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.ToTable("Orders");
+                    b.HasKey("OrderId", "ProductId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("OrderProduct");
                 });
 
             modelBuilder.Entity("Sklep_internetowy_projekt.Models.Product", b =>
@@ -294,6 +329,39 @@ namespace Sklep_internetowy_projekt.Migrations
                     b.HasKey("ProductId");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("Sklep_internetowy_projekt.Models.ShoppingCartItem", b =>
+                {
+                    b.Property<int>("ProductId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductId"));
+
+                    b.Property<int?>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("ProductId1")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ProductName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProductId");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId1");
+
+                    b.ToTable("ShoppingCartItem");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -345,6 +413,52 @@ namespace Sklep_internetowy_projekt.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Sklep_internetowy_projekt.Models.OrderProduct", b =>
+                {
+                    b.HasOne("Sklep_internetowy_projekt.Models.Order", "Order")
+                        .WithMany("OrderProducts")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Sklep_internetowy_projekt.Models.Product", "Product")
+                        .WithMany("OrderProducts")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("Sklep_internetowy_projekt.Models.ShoppingCartItem", b =>
+                {
+                    b.HasOne("Sklep_internetowy_projekt.Models.Order", null)
+                        .WithMany("SelectedProducts")
+                        .HasForeignKey("OrderId");
+
+                    b.HasOne("Sklep_internetowy_projekt.Models.Product", null)
+                        .WithMany("ShoppingCartItems")
+                        .HasForeignKey("ProductId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Sklep_internetowy_projekt.Models.Order", b =>
+                {
+                    b.Navigation("OrderProducts");
+
+                    b.Navigation("SelectedProducts");
+                });
+
+            modelBuilder.Entity("Sklep_internetowy_projekt.Models.Product", b =>
+                {
+                    b.Navigation("OrderProducts");
+
+                    b.Navigation("ShoppingCartItems");
                 });
 #pragma warning restore 612, 618
         }
