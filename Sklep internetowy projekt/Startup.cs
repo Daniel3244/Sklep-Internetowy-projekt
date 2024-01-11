@@ -77,18 +77,26 @@ namespace Sklep_internetowy_projekt
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
+                    name: "areaRoute",
+                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Product}/{action=Index}/{id?}");
 
                 endpoints.MapControllerRoute(
                    name: "admin",
-                  
                    pattern: "{controller=Admin}/{action=Index}/{id?}");
+
+                endpoints.MapControllerRoute(
+                   name: "order",
+                   pattern: "{controller=Order}/{action=Checkout}/{id?}");
 
                 endpoints.MapAreaControllerRoute(
                     name: "Identity",
                     areaName: "Identity",
                     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
 
                 endpoints.MapRazorPages();
             });

@@ -15,7 +15,7 @@ public class OrderController : Controller
 
     public IActionResult ManageOrders()
     {
-        var orders = _context.Orders.ToList();
+        var orders = _context.Order.ToList();
         return View(orders);
     }
 
@@ -29,10 +29,36 @@ public class OrderController : Controller
     {
         if (ModelState.IsValid)
         {
-            _context.Orders.Add(order);
+            _context.Order.Add(order);
             _context.SaveChanges();
             return RedirectToAction("ManageOrders");
         }
         return View(order);
+    }
+
+    [HttpGet]
+    public IActionResult Checkout()
+    {
+        var order = new Order();
+        return View(order);
+    }
+
+    [HttpPost]
+    public IActionResult PlaceOrder(Order order)
+    {
+        if (!ModelState.IsValid)
+        {
+            // Save order details to the database
+            _context.Order.Add(order);
+           
+           _context.SaveChanges();
+
+            // You may want to clear the shopping cart or perform other actions
+
+            return RedirectToAction("OrderConfirmation", new { orderId = order.OrderId });
+        }
+
+        // If ModelState is not valid, return to the checkout page with errors
+        return View("Checkout", order);
     }
 }

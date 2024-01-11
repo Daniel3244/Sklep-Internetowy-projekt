@@ -15,19 +15,8 @@ namespace Sklep_internetowy_projekt.Models
         public decimal Price { get; set; }
         public string ImagePath { get; set; }
 
+        public ICollection<OrderProduct> OrderProducts { get; set; }
     }
 
-    public class Order
-    { 
-        public int OrderId { get; set; }
 
-        [Required]
-        public DateTime OrderDate { get; set; }
-
-        [Required]
-        public int ProductId { get; set; }
-
-        [Required]
-        public int Quantity { get; set; }
-    }
 }
