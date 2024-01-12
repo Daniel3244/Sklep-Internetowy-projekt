@@ -22,7 +22,12 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="Index" class="navbar-link">Cart</a>
                         </li>
+                        @if(User.IsInRole("Admin"))
+                        {
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Dodawanie produktów jako admin" asp-action="Index" class="navbar-link">Admin</a>
+                        }
                     </ul>
+
                 </div>         
                 <partial name="_LoginPartial" />
             </div>

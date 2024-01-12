@@ -50,15 +50,15 @@ namespace Sklep_internetowy_projekt.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "3a65f731-c12d-4efe-a76e-f5f036849e24",
-                            ConcurrencyStamp = "84a1008a-2196-46dd-9078-45a0a9529f92",
+                            Id = "dd29a508-a616-43e0-8ff4-f41f915e04dd",
+                            ConcurrencyStamp = "9237f7d9-e6fb-4500-8cd4-40b7190250c9",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "42594147-9ca0-4174-8785-014c53b29169",
-                            ConcurrencyStamp = "c9bfbb63-c5a1-4165-bc97-de5e55cb480e",
+                            Id = "c537df55-cd79-4e48-a0f2-80e70c9a124e",
+                            ConcurrencyStamp = "e5d26be2-64bc-4244-b56a-c47ee07dd195",
                             Name = "User",
                             NormalizedName = "USER"
                         });
