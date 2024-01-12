@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "NiU/j5XtBaPCg2EchnvUDwzrgv4x04DuneJNCynslvI=",
+  "Hash": "trG2qRteCOjjI9TogqorWTo6RvOjkBhS7hZhYZ7Ndbg=",
   "Source": "Sklep internetowy projekt",
   "BasePath": "_content/Sklep internetowy projekt",
   "Mode": "Default",
@@ -2409,6 +2409,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\Pics\\laptop_gamingowy.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\mitan\\Source\\Repos\\Sklep-Internetowy-projekt\\Sklep internetowy projekt\\wwwroot\\Pics\\message.txt",
+      "SourceId": "Sklep internetowy projekt",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\mitan\\Source\\Repos\\Sklep-Internetowy-projekt\\Sklep internetowy projekt\\wwwroot\\",
+      "BasePath": "_content/Sklep internetowy projekt",
+      "RelativePath": "Pics/message.txt",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Pics\\message.txt"
     },
     {
       "Identity": "C:\\Users\\mitan\\Source\\Repos\\Sklep-Internetowy-projekt\\Sklep internetowy projekt\\wwwroot\\Pics\\monitor_4k_ultrasharp.jpg",

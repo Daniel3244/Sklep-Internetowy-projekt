@@ -15,13 +15,11 @@ public class SeedData
 
         var roleExist = await roleManager.RoleExistsAsync(roleName);
 
-        // Create the Admin role if it doesn't exist
         if (!roleExist)
         {
             roleResult = await roleManager.CreateAsync(new IdentityRole(roleName));
         }
 
-        // Create the Admin user
         var admin = new ApplicationUser
         {
             UserName = "admin@admin.com",
@@ -40,7 +38,6 @@ public class SeedData
 
             if (createAdmin.Succeeded)
             {
-                // Add the Admin user to the Admin role
                 await userManager.AddToRoleAsync(admin, roleName);
                 Console.WriteLine("Admin created");
             }
