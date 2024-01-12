@@ -17,6 +17,16 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         base.OnModelCreating(builder);
 
+        builder.Entity<Order>()
+            .HasMany(o => o.OrderProducts)
+            .WithOne(op => op.Order)
+            .HasForeignKey(op => op.OrderId);
+
+        builder.Entity<Product>()
+            .HasMany(p => p.OrderProducts)
+            .WithOne(op => op.Product)
+            .HasForeignKey(op => op.ProductId);
+
         builder.Entity<OrderProduct>();
              builder.Entity<OrderProduct>()
              .HasKey(op => new { op.OrderId, op.ProductId });

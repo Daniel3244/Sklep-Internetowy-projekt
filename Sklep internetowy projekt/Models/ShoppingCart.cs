@@ -11,7 +11,6 @@ namespace Sklep_internetowy_projekt.Models
     public class ShoppingCartItem
     {
         [Key]
-        [ForeignKey("ProductId")]
         public int ProductId { get; set; }
         public string ProductName { get; set; }
 

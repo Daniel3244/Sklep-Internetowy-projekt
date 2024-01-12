@@ -18,6 +18,16 @@ namespace Sklep_internetowy_projekt
             Configuration = configuration;
         }
 
+        public async Task InitializeAsync(IApplicationBuilder app)
+        {
+            using (var serviceScope = app.ApplicationServices.CreateScope())
+            {
+                var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+                var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                await SeedData.Initialize(userManager, roleManager);
+            }
+        }
+
         public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
@@ -59,15 +69,8 @@ namespace Sklep_internetowy_projekt
                 app.UseHsts();
             }
 
-            // Kod dodajacy konto admina, przy pierwszym uruchomieniu odkomentowac, uruchomic, potem zakomentowac
-            /* using (var serviceScope = app.ApplicationServices.CreateScope())
-             {
-                 var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-                 var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            InitializeAsync(app).GetAwaiter().GetResult();
 
-                 await SeedData.Initialize(userManager, roleManager);
-             }  */
-           
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSession();
