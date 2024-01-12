@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Sklep_internetowy_projekt.Migrations
 {
     /// <inheritdoc />
-    public partial class sklep : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -253,8 +253,8 @@ namespace Sklep_internetowy_projekt.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "c537df55-cd79-4e48-a0f2-80e70c9a124e", "e5d26be2-64bc-4244-b56a-c47ee07dd195", "User", "USER" },
-                    { "dd29a508-a616-43e0-8ff4-f41f915e04dd", "9237f7d9-e6fb-4500-8cd4-40b7190250c9", "Admin", "ADMIN" }
+                    { "6dd137b6-479d-4250-994d-2b5c842701bb", "55cc044b-0a49-4578-b309-2028db80fb10", "Admin", "ADMIN" },
+                    { "9cab5030-da93-4263-a95e-3aa90ce0862e", "b6e17e6e-0329-48ce-bf53-2ab8b99232d5", "User", "USER" }
                 });
 
             migrationBuilder.CreateIndex(

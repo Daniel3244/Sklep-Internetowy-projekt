@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Sklep_internetowy_projekt.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240112101221_sklep")]
-    partial class sklep
+    [Migration("20240112110938_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -53,15 +53,15 @@ namespace Sklep_internetowy_projekt.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "dd29a508-a616-43e0-8ff4-f41f915e04dd",
-                            ConcurrencyStamp = "9237f7d9-e6fb-4500-8cd4-40b7190250c9",
+                            Id = "6dd137b6-479d-4250-994d-2b5c842701bb",
+                            ConcurrencyStamp = "55cc044b-0a49-4578-b309-2028db80fb10",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "c537df55-cd79-4e48-a0f2-80e70c9a124e",
-                            ConcurrencyStamp = "e5d26be2-64bc-4244-b56a-c47ee07dd195",
+                            Id = "9cab5030-da93-4263-a95e-3aa90ce0862e",
+                            ConcurrencyStamp = "b6e17e6e-0329-48ce-bf53-2ab8b99232d5",
                             Name = "User",
                             NormalizedName = "USER"
                         });
