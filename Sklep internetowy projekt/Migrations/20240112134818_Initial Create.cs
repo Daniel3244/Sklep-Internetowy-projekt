@@ -253,8 +253,8 @@ namespace Sklep_internetowy_projekt.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "020115f3-2776-4cab-8203-216715da644d", "61b0ff21-9ca1-4844-a926-4f9b940747ec", "User", "USER" },
-                    { "0c3874f6-9f8a-48eb-9fd3-dbd324cb4d46", "4106de71-953c-44f8-9b97-952e6223d6a2", "Admin", "ADMIN" }
+                    { "1acdf58e-41c2-466d-99dd-2dcb1e0e4a7b", "8b65dc18-0b31-4ccc-9df6-35e4827874a9", "User", "USER" },
+                    { "915ce093-4185-4421-9475-720f10db57d3", "b50f1de5-a833-4061-824a-fd8656306bea", "Admin", "ADMIN" }
                 });
 
             migrationBuilder.CreateIndex(

@@ -24,7 +24,8 @@ namespace Sklep_internetowy_projekt
             {
                 var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
                 var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-                await SeedData.Initialize(userManager, roleManager);
+                var context = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                await SeedData.Initialize(userManager, roleManager, context);
             }
         }
 
