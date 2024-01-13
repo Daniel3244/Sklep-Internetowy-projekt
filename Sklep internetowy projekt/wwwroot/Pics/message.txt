@@ -1,0 +1,495 @@
+Newtonsoft.Json.JsonSerializationException: „Cannot deserialize the current JSON array (e.g. [1,2,3]) into type 'Sklep_internetowy_projekt.Models.ShoppingCart' because the type requires a JSON object (e.g. {"name":"value"}) to deserialize correctly.
+To fix this error either change the JSON to a JSON object (e.g. {"name":"value"}) or change the deserialized type to an array or a type that implements a collection interface (e.g. ICollection, IList) like List<T> that can be deserialized from a JSON array. JsonArrayAttribute can also be added to the type to force it to deserialize from a JSON array.
+Path '', line 1, position 1.”
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Sklep_internetowy_projekt.Models;
+
+public class CartController : Controller
+{
+    private readonly ApplicationDbContext _context;
+
+    public CartController(ApplicationDbContext context)
+    {
+        _context = context;
+    }
+
+    public IActionResult Index()
+    {
+        ShoppingCart cart = GetShoppingCart();
+        return View(cart.Items);
+    }
+
+    public IActionResult AddToCart(int productId, int quantity)
+    {
+        var product = _context.Products.FirstOrDefault(p => p.ProductId == productId);
+
+        if (product == null)
+        {
+            // Handle the error - product not found
+            return NotFound();
+        }
+
+        List<ShoppingCartItem> cartItems = GetCartItems();
+        // Logic to add the product to cartItems or update quantity
+
+        // Serialize and save the updated cart items to the session
+        string serializedCartItems = JsonConvert.SerializeObject(cartItems);
+        HttpContext.Session.SetString("Cart", serializedCartItems);
+
+        // Redirect to a view or return a response
+        return RedirectToAction("Index"); // Redirect to a suitable view
+    }
+
+    private List<ShoppingCartItem> GetCartItems()
+    {
+        var cartItems = HttpContext.Session.GetString("Cart");
+        return string.IsNullOrEmpty(cartItems) ? new List<ShoppingCartItem>() : JsonConvert.DeserializeObject<List<ShoppingCartItem>>(cartItems);
+    }
+
+    private ShoppingCart GetShoppingCart()
+    {
+        string cartJson = HttpContext.Session.GetString("Cart");
+        ShoppingCart cart = string.IsNullOrEmpty(cartJson) ? new ShoppingCart() : JsonConvert.DeserializeObject<ShoppingCart>(cartJson);
+        return cart;
+    }
+
+
+    private void AddItemToCart(Product product)
+    {
+        ShoppingCart cart = GetShoppingCart();
+
+        var existingItem = cart.Items.FirstOrDefault(item => item.ProductId == product.ProductId);
+
+        if (existingItem != null)
+        {
+            existingItem.Quantity++;
+        }
+        else
+        {
+            var newItem = new ShoppingCartItem // Utworzenie instancji ShoppingCartItem
+            {
+                ProductId = product.ProductId,
+                ProductName = product.Name,
+                Price = product.Price,
+                Quantity = 1
+            };
+            cart.Items.Add(newItem);
+        }
+
+        // Serializacja i zapis koszyka do sesji
+        string cartJson = JsonConvert.SerializeObject(cart);
+        HttpContext.Session.SetString("Cart", cartJson);
+    }
+
+
+
+
+
+}
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Sklep_internetowy_projekt.Models;
+
+public class CartController : Controller
+{
+    private readonly ApplicationDbContext _context;
+
+    public CartController(ApplicationDbContext context)
+    {
+        _context = context;
+    }
+
+    public IActionResult Index()
+    {
+        ShoppingCart cart = GetShoppingCart();
+        return View(cart.Items);
+    }
+
+    public IActionResult AddToCart(int productId, int quantity)
+    {
+        var product = _context.Products.FirstOrDefault(p => p.ProductId == productId);
+
+        if (product == null)
+        {
+            // Handle the error - product not found
+            return NotFound();
+        }
+
+        List<ShoppingCartItem> cartItems = GetCartItems();
+        // Logic to add the product to cartItems or update quantity
+
+        // Serialize and save the updated cart items to the session
+        string serializedCartItems = JsonConvert.SerializeObject(cartItems);
+        HttpContext.Session.SetString("Cart", serializedCartItems);
+
+        // Redirect to a view or return a response
+        return RedirectToAction("Index"); // Redirect to a suitable view
+    }
+
+    private List<ShoppingCartItem> GetCartItems()
+    {
+        var cartItems = HttpContext.Session.GetString("Cart");
+        return string.IsNullOrEmpty(cartItems) ? new List<ShoppingCartItem>() : JsonConvert.DeserializeObject<List<ShoppingCartItem>>(cartItems);
+    }
+
+    private ShoppingCart GetShoppingCart()
+    {
+        string cartJson = HttpContext.Session.GetString("Cart");
+        ShoppingCart cart = string.IsNullOrEmpty(cartJson) ? new ShoppingCart() : JsonConvert.DeserializeObject<ShoppingCart>(cartJson);
+        return cart;
+    }
+
+
+    private void AddItemToCart(Product product)
+    {
+        ShoppingCart cart = GetShoppingCart();
+
+        var existingItem = cart.Items.FirstOrDefault(item => item.ProductId == product.ProductId);
+
+        if (existingItem != null)
+        {
+            existingItem.Quantity++;
+        }
+        else
+        {
+            var newItem = new ShoppingCartItem // Utworzenie instancji ShoppingCartItem
+            {
+                ProductId = product.ProductId,
+                ProductName = product.Name,
+                Price = product.Price,
+                Quantity = 1
+            };
+            cart.Items.Add(newItem);
+        }
+
+        // Serializacja i zapis koszyka do sesji
+        string cartJson = JsonConvert.SerializeObject(cart);
+        HttpContext.Session.SetString("Cart", cartJson);
+    }
+
+
+
+
+
+}
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Sklep_internetowy_projekt.Models;
+using System.Linq;
+
+
+[Authorize]
+public class ProductController : Controller
+{
+    private readonly ApplicationDbContext _context;
+
+    public ProductController(ApplicationDbContext context)
+    {
+        _context = context;
+    }
+
+    public IActionResult Index()
+    {
+        var products = _context.Products.ToList();
+        return View(products);
+    }
+
+    public IActionResult Details(int? id)
+    {
+        if (id == null)
+        {
+            return NotFound();
+        }
+
+        var product = _context.Products.FirstOrDefault(p => p.ProductId == id);
+
+        if (product == null)
+        {
+            return NotFound();
+        }
+
+        return View(product);
+    }
+
+
+
+}
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Sklep_internetowy_projekt.Models
+{
+    [NotMapped]
+    public class ShoppingCartItem
+    {
+        [Key]
+        public int ShoppingCartItemId { get; set; }
+
+        [ForeignKey("ProductId")]
+        public int ProductId { get; set; }
+        public string ProductName { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:C}")]
+        public decimal Price { get; set; }
+        public int Quantity { get; set; }
+
+        // Właściwość nawigacyjna do Product
+        public virtual Product Product { get; set; }
+    }
+}
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Sklep_internetowy_projekt.Models
+{
+    [NotMapped]
+    public class ShoppingCart
+    {
+        [NotMapped]
+        public List<ShoppingCartItem> Items { get; set; } = new List<ShoppingCartItem>();
+    }
+}
+namespace Sklep_internetowy_projekt.Models
+{
+    public class SelectedProduct
+    {
+        public int ProductId { get; set; }
+        public int Quantity { get; set; }
+        public decimal UnitPrice { get; set; }
+    }
+
+}
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Sklep_internetowy_projekt.Models
+{
+    public class OrderProduct
+    {
+        public int OrderId { get; set; }
+
+        public int ProductId { get; set; }
+
+        [ForeignKey("OrderId")]
+        public Order Order { get; set; }
+
+        [ForeignKey("ProductId")]
+        public Product Product { get; set; }
+
+        public int Quantity { get; set; }
+
+        public decimal UnitPrice { get; set; }
+    }
+}
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Sklep_internetowy_projekt.Models
+{
+    public class Order
+    {
+        public int OrderId { get; set; }
+
+        [Required(ErrorMessage = "Name is required.")]
+        public string Name { get; set; }
+
+        [Required(ErrorMessage = "Surname is required.")]
+        public string Surname { get; set; }
+
+        [Required(ErrorMessage = "Address is required.")]
+        public string Address { get; set; }
+
+        [Required(ErrorMessage = "Postal Code is required.")]
+        [RegularExpression(@"^\d{5}$", ErrorMessage = "Postal Code must be a 5-digit number.")]
+        public string PostalCode { get; set; }
+
+        [Required(ErrorMessage = "Home Number is required.")]
+        public string HomeNumber { get; set; }
+
+        public DateTime OrderDate { get; set; }
+
+        [NotMapped]
+        public List<ShoppingCartItem> SelectedProducts { get; set; } = new List<ShoppingCartItem>();
+
+        public ICollection<OrderProduct> OrderProducts { get; set; }
+    }
+
+}
+@model List<ShoppingCartItem>
+
+<h2>Your Shopping Cart</h2>
+
+@using System.Globalization
+
+@if (Model.Count == 0)
+{
+    <p>Your cart is empty.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @{
+                CultureInfo culture = new CultureInfo("pl-PL");
+            }
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ProductName</td>
+                    <td>@item.Price.ToString("C", culture)</td>
+                    <td>@item.Quantity</td>
+                    <td>@(item.Price * item.Quantity)zł</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div>
+        <a asp-controller="Order" asp-action="Checkout" class="btn btn-primary">Checkout</a>
+    </div>
+
+
+}
+@model Sklep_internetowy_projekt.Models.Order
+
+<h2>Checkout</h2>
+
+<div>
+    <partial name="_CheckoutFormPartial" model="@Model" />
+</div>
+@model IEnumerable<Sklep_internetowy_projekt.Models.Order>
+
+@{
+    ViewData["Title"] = "Manage Orders";
+}
+
+<h2>Manage Orders</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Order Number</th>
+            <th>Order Date</th>
+            <th>Customer</th>
+            <th>Address</th>
+            <th>Product Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+            <tr>
+                <td>@order.OrderId</td>
+                <td>@order.OrderDate.ToShortDateString()</td>
+                <td>@order.Name @order.Surname</td>
+                <td>@order.Address</td>
+                <td>
+                    <ul>
+                        @foreach (var orderProduct in order.OrderProducts)
+                        {
+                            <li>
+                                Product: @orderProduct.Product.Name, Quantity: @orderProduct.Quantity
+                            </li>
+                        }
+                    </ul>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@model Sklep_internetowy_projekt.Models.Order
+
+@{
+    ViewData["Title"] = "Potwierdzenie zamówienia";
+    decimal totalPrice = ViewBag.TotalPrice;
+}
+
+<h2>Potwierdzenie zamówienia</h2>
+
+<div>
+    <h3>Szczegóły zamówienia</h3>
+    <p>
+        <strong>Numer zamówienia:</strong> @Model.OrderId<br />
+        <strong>Data zamówienia:</strong> @Model.OrderDate.ToShortDateString()
+    </p>
+
+    <h4>Produkty w zamówieniu:</h4>
+    <ul>
+        @foreach (var item in Model.OrderProducts)
+        {
+            <li>
+                Produkt: @item.Product.Name, Ilość: @item.Quantity, Cena za sztukę: @item.UnitPrice
+            </li>
+        }
+    </ul>
+
+    <p>
+        <strong>Całkowity koszt:</strong> @totalPrice
+    </p>
+</div>
+
+<div>
+    <a asp-action="Index" asp-controller="Home">Powrót do strony głównej</a>
+</div>
+@model Sklep_internetowy_projekt.Models.Order
+
+
+<form asp-action="PlaceOrder" method="post">
+    <div>
+        <label for="Name">Name:</label>
+        <input type="text" id="Name" name="Name" value="@Model.Name" required />
+        <span asp-validation-for="Name"></span>
+    </div>
+
+    <div>
+        <label for="Surname">Surname:</label>
+        <input type="text" id="Surname" name="Surname" value="@Model.Surname" required />
+        <span asp-validation-for="Surname"></span>
+    </div>
+
+    <div>
+        <label for="Address">Address:</label>
+        <input type="text" id="Address" name="Address" value="@Model.Address" required />
+        <span asp-validation-for="Address"></span>
+    </div>
+
+    <div>
+        <label for="PostalCode">Postal Code:</label>
+        <input type="text" id="PostalCode" name="PostalCode" value="@Model.PostalCode" required />
+        <span asp-validation-for="PostalCode"></span>
+    </div>
+
+    <div>
+        <label for="HomeNumber">Home Number:</label>
+        <input type="text" id="HomeNumber" name="HomeNumber" value="@Model.HomeNumber" required />
+        <span asp-validation-for="HomeNumber"></span>
+    </div>
+
+    @for (var i = 0; i < Model.SelectedProducts.Count; i++)
+    {
+        <div>
+            <input type="checkbox" id="product_@Model.SelectedProducts[i].Product.ProductId" name="SelectedProducts[@i].Product.ProductId" value="@Model.SelectedProducts[i].Product.ProductId" />
+            <label for="product_@Model.SelectedProducts[i].Product.ProductId">@Model.SelectedProducts[i].Product.Name</label>
+            <input type="number" id="quantity_@Model.SelectedProducts[i].Product.ProductId" name="SelectedProducts[@i].Quantity" value="@Model.SelectedProducts[i].Quantity" min="0" />
+        </div>
+    }
+    <button type="submit">Place Order</button>
+</form>

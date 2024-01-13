@@ -1,0 +1,37 @@
+﻿@model Sklep_internetowy_projekt.Models.Product
+
+<h2>Edit</h2>
+
+<form asp-action="Edit" asp-controller="Admin" method="post">
+    <input type="hidden" asp-for="ProductId" />
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="form-group">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Desc" class="control-label"></label>
+        <input asp-for="Desc" class="form-control" />
+        <span asp-validation-for="Desc" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Price" class="control-label"></label>
+        <input asp-for="Price" class="form-control" />
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ImagePath" class="control-label"></label>
+        <input asp-for="ImagePath" class="form-control" />
+        <span asp-validation-for="ImagePath" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+</form>

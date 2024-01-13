@@ -1,0 +1,15 @@
+﻿@model Product
+
+
+<div class="card">
+    <img src=/Pics/@Model.ImagePath class="card-img-top" alt="Product Image" style="max-width: 100%; max-height: 100%;">
+    <div class="card-body">
+        <h5 class="card-title">@Model.Name</h5>
+        <p class="card-text">Cena: @Model.Price.ToString("C")</p>
+        <p class="card-text">Opis: @Model.Desc</p>
+
+
+        <a asp-action="Edit" asp-route-id="@Model.ProductId">Edit</a>
+       
+    </div>
+</div>
